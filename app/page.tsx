@@ -132,10 +132,10 @@ export default function Page() {
             <div className="ph">
               <div className="ph-glyph" />
             </div>
-            {heroSrc && <img className="cover" src={heroSrc} alt="Featured Palm Jumeirah villa" />}
+            {heroSrc && <img className="cover" src={heroSrc} alt="Featured Palm Crown villa" />}
             <div className="badge">Featured · Palm Jumeirah</div>
             <div className="cap">
-              <div className="n">Frond E Beach Villa</div>
+              <div className="n">Palm Crown villa</div>
               <div className="a">Garden Homes · Atlantis View</div>
             </div>
           </div>
