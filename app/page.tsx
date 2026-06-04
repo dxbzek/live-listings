@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Collection from "@/components/Collection";
 import LeadForm from "@/components/LeadForm";
 import { WhatsAppIcon } from "@/components/icons";
+import Portrait from "@/components/Portrait";
 import { LISTINGS, WA } from "@/lib/listings";
 
 const heroSrc = LISTINGS.find((l) => l.id === "r-03-frond-e")?.src ?? null;
@@ -244,6 +245,7 @@ export default function Page() {
               <div className="ph">
                 <div className="ph-glyph" />
               </div>
+              <Portrait src="/abdul.jpg" alt="Abdul Kadir Faizal" />
             </div>
             <div className="agent-info">
               <div className="nm">Abdul Kadir Faizal</div>
