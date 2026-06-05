@@ -32,10 +32,14 @@ export interface Listing extends RawListing {
   gallery: string[]; // real, hosted photos only
 }
 
-/* Real PropertyFinder CDN photos: listing key + image UUIDs */
-const pfimg = (key: string, uuid: string) =>
-  `https://static.shared.propertyfinder.ae/media/images/listing/${key}/${uuid}/668x452.jpg`;
-const pf = (key: string, uuids: string[]) => uuids.map((u) => pfimg(key, u));
+/* Real PropertyFinder CDN photos: listing key + image UUIDs.
+ * `variant` is the CDN size/format segment; it defaults to the 668x452 JPG
+ * rendition used across the collection, but can be overridden per listing
+ * (e.g. when only a WebP rendition URL is on hand for that listing). */
+const pfimg = (key: string, uuid: string, variant = "668x452.jpg") =>
+  `https://static.shared.propertyfinder.ae/media/images/listing/${key}/${uuid}/${variant}`;
+const pf = (key: string, uuids: string[], variant?: string) =>
+  uuids.map((u) => pfimg(key, u, variant));
 
 /* Local photo set helper — used by a couple of listings whose photos are not
  * hosted on the CDN. These resolve to nothing in this build (no local files),
@@ -82,7 +86,7 @@ export const PF_URLS: Record<string, string> = {
 
 const RAW: RawListing[] = [
   // RENT
-  { kind: "rent", name: "NEWLY RENOVATED | VACANT | 2 BEDROOM + MAID", area: "The Springs", type: "villa", tag: "Vacant", deal: "NEWLY RENOVATED", spec: "2 Bed + Maid · 3 Bath · 1,630 sqft", price: "190,000", id: "r-01-springs8", photos: gal("r-01-springs8") },
+  { kind: "rent", name: "NEWLY RENOVATED | VACANT | 2 BEDROOM + MAID", area: "The Springs", type: "villa", tag: "Vacant", deal: "NEWLY RENOVATED", spec: "2 Bed + Maid · 3 Bath · 1,630 sqft", price: "190,000", id: "r-01-springs8", photos: pf("K7DMJ0FZB7HAMDPEAS95605RP0", ["54c2b3ec-e92a-4065-ac3e-44d54559d645", "d1429c23-63c7-4457-83a3-71495c781f7b", "c89a69ad-9cf7-4335-8d33-98d3c0546c22"], "1312x894.webp") },
   { kind: "rent", name: "Renovated 2BR | Full Sea View | Palm", area: "Palm Jumeirah", type: "apt", tag: "Furnished", deal: "FULL SEA VIEW", spec: "2 Bed · 3 Bath · 1,778 sqft · Renovated", price: "250,000", id: "r-02-mr6", photos: gal("r-02-mr6") },
   { kind: "rent", name: "Beachfront 4BR Villa | Atlantis View | Palm", area: "Palm · Garden Homes E", type: "villa", tag: "Luxe", deal: "ATLANTIS VIEW", spec: "4 Bed + Maid · 5 Bath · 6,698 sqft", price: "1,500,000", id: "r-03-frond-e", photos: pf("FGDEVPPPKVEWEBW0MGZR4D011C", ["09d544aa-e636-43b0-b9be-7754721f81fa", "4e5b9e0d-23b2-4e7a-b1e7-9713e9ccc501", "1ec9a0c2-a597-4ef3-bdf3-d3f296d5a1c1"]) },
   { kind: "rent", name: "Sea View | Elegant 2BR | Prime Location", area: "Palm · Marina Residences 6", type: "apt", tag: "Sea View", deal: "PRIME LOCATION", spec: "2 Bed · 3 Bath · 1,745 sqft · Sea View", price: "230,000", id: "r-07-mr6-2br", photos: pf("R6V3HHRMX1B1KJNZBGP55Y0N3C", ["b8c91d0f-189e-4c2e-ab37-da4ca3559059", "439af097-1f34-48fb-8026-2f54a6f72aa8", "0db8b48e-0e45-4aa0-8879-ad65182aa98d"]) },
