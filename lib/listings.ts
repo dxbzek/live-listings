@@ -32,16 +32,14 @@ export interface Listing extends RawListing {
   gallery: string[]; // real, hosted photos only
 }
 
-/* Real PropertyFinder CDN photos: listing key + image UUIDs */
+/* Real PropertyFinder CDN photos: listing key + image UUIDs.
+ * Always the 668x452 JPG thumbnail rendition — the one PropertyFinder serves
+ * cross-origin. The larger gallery renditions (e.g. 1312x894 WebP) are
+ * hotlink-protected and 403 when embedded off propertyfinder.ae, so don't
+ * switch to them here. */
 const pfimg = (key: string, uuid: string) =>
   `https://static.shared.propertyfinder.ae/media/images/listing/${key}/${uuid}/668x452.jpg`;
 const pf = (key: string, uuids: string[]) => uuids.map((u) => pfimg(key, u));
-
-/* Local photo set helper — used by a couple of listings whose photos are not
- * hosted on the CDN. These resolve to nothing in this build (no local files),
- * so such listings render with the on-brand placeholder frame. */
-const gal = (id: string, count = 3) =>
-  Array.from({ length: count }, (_, i) => `photos/listings/${id}-${i + 1}.jpg`);
 
 /* Live PropertyFinder listing URLs */
 export const PF_URLS: Record<string, string> = {
@@ -67,7 +65,6 @@ export const PF_URLS: Record<string, string> = {
   "r-17-fivepalm": "https://www.propertyfinder.ae/en/plp/rent/apartment-for-rent-dubai-palm-jumeirah-five-palm-jumeirah-97829396.html",
   "r-18-dec2": "https://www.propertyfinder.ae/en/plp/rent/apartment-for-rent-dubai-dubai-marina-dec-towers-dec-tower-2-94447595.html",
   "r-19-serenity": "https://www.propertyfinder.ae/en/plp/rent/apartment-for-rent-dubai-jumeirah-village-circle-district-10-serenity-lakes-5-89643413.html",
-  "s-07-aura": "https://www.propertyfinder.ae/en/plp/buy/villa-for-sale-dubai-tilal-al-ghaf-aura-gardens-85759401.html",
   "s-08-frond-m": "https://www.propertyfinder.ae/en/plp/buy/villa-for-sale-dubai-palm-jumeirah-garden-homes-garden-homes-frond-m-97405058.html",
   "s-09-jpark": "https://www.propertyfinder.ae/en/plp/buy/villa-for-sale-dubai-jumeirah-park-regional-regional-large-97403672.html",
   "s-10-mr6": "https://www.propertyfinder.ae/en/plp/buy/apartment-for-sale-dubai-palm-jumeirah-marina-residences-marina-residences-6-97804080.html",
@@ -83,8 +80,8 @@ export const PF_URLS: Record<string, string> = {
 
 const RAW: RawListing[] = [
   // RENT
-  { kind: "rent", name: "NEWLY RENOVATED | VACANT | 2 BEDROOM + MAID", area: "The Springs", type: "villa", tag: "Vacant", deal: "NEWLY RENOVATED", spec: "2 Bed + Maid · 3 Bath · 1,630 sqft", price: "190,000", id: "r-01-springs8", photos: gal("r-01-springs8") },
-  { kind: "rent", name: "Renovated 2BR | Full Sea View | Palm", area: "Palm Jumeirah", type: "apt", tag: "Furnished", deal: "FULL SEA VIEW", spec: "2 Bed · 3 Bath · 1,778 sqft · Renovated", price: "250,000", id: "r-02-mr6", photos: gal("r-02-mr6") },
+  { kind: "rent", name: "NEWLY RENOVATED | VACANT | 2 BEDROOM + MAID", area: "The Springs", type: "villa", tag: "Vacant", deal: "NEWLY RENOVATED", spec: "2 Bed + Maid · 3 Bath · 1,630 sqft", price: "190,000", id: "r-01-springs8", photos: pf("K7DMJ0FZB7HAMDPEAS95605RP0", ["54c2b3ec-e92a-4065-ac3e-44d54559d645", "d1429c23-63c7-4457-83a3-71495c781f7b", "c89a69ad-9cf7-4335-8d33-98d3c0546c22"]) },
+  { kind: "rent", name: "Renovated 2BR | Full Sea View | Palm", area: "Palm Jumeirah", type: "apt", tag: "Furnished", deal: "FULL SEA VIEW", spec: "2 Bed · 3 Bath · 1,778 sqft · Renovated", price: "250,000", id: "r-02-mr6", photos: [...pf("0725Z7WMTS7PXJH9G4T4ZSVFT0", ["184b2f28-1927-4246-8e76-4264e47452e0", "bbdc58b9-6607-4337-a5fc-e6cc4464c95a"]), "https://graph-images.propertyfinder.ae/ae/building/4331/eca8c2f82be6287878c0cca67f60157f/watermark.jpeg"] },
   { kind: "rent", name: "Beachfront 4BR Villa | Atlantis View | Palm", area: "Palm · Garden Homes E", type: "villa", tag: "Luxe", deal: "ATLANTIS VIEW", spec: "4 Bed + Maid · 5 Bath · 6,698 sqft", price: "1,500,000", id: "r-03-frond-e", photos: pf("FGDEVPPPKVEWEBW0MGZR4D011C", ["09d544aa-e636-43b0-b9be-7754721f81fa", "4e5b9e0d-23b2-4e7a-b1e7-9713e9ccc501", "1ec9a0c2-a597-4ef3-bdf3-d3f296d5a1c1"]) },
   { kind: "rent", name: "Sea View | Elegant 2BR | Prime Location", area: "Palm · Marina Residences 6", type: "apt", tag: "Sea View", deal: "PRIME LOCATION", spec: "2 Bed · 3 Bath · 1,745 sqft · Sea View", price: "230,000", id: "r-07-mr6-2br", photos: pf("R6V3HHRMX1B1KJNZBGP55Y0N3C", ["b8c91d0f-189e-4c2e-ab37-da4ca3559059", "439af097-1f34-48fb-8026-2f54a6f72aa8", "0db8b48e-0e45-4aa0-8879-ad65182aa98d"]) },
   { kind: "rent", name: "Luxury 4BR Villa | Private Beach | Palm", area: "Palm · Garden Homes C", type: "villa", tag: "Furnished", deal: "PRIVATE BEACH", spec: "4 Bed + Maid · 5 Bath · 6,718 sqft", price: "900,000", id: "r-04-frond-c", photos: pf("0MARXYHA1RZT87FPEQ41M91BAM", ["4eca17c3-4244-42b3-b8f7-44bf017989e2", "5bccecc8-f5e5-4101-93a0-eb131dfcca65", "65fd37c7-f62d-4355-88b7-0f7b88a03b56"]) },
@@ -107,7 +104,6 @@ const RAW: RawListing[] = [
   // SALE
   { kind: "sale", name: "Lake View Office Space | Vacant | Prime Location", area: "JLT · Platinum Tower", type: "office", tag: "Vacant", deal: "LAKE VIEW", spec: "Office · 1 Bath · 1,151 sqft", price: "2,750,000", id: "s-16-platinum", photos: pf("9NQB971KY3K48AMW142HDRD2WM", ["8de30ae2-9a39-49fa-b270-0fdc8a43c389", "14907d2a-7762-4f63-a8ee-a0d7e8b1ac08", "d23cb1d0-77fa-42a1-8be2-89a1ada993c2"]) },
   { kind: "sale", name: "2-in-1 Office | Barsha Heights TECOM | Near Metro", area: "Barsha Heights · Cayan Business Center", type: "office", tag: "Fitted", deal: "NEAR METRO", spec: "Office · Fitted · 4,767 sqft", price: "12,000,000", id: "s-17-cayan", photos: pf("M679V9W5Z6VBQ6B5369N409JAM", ["9fcc87a9-fd25-4c5a-a55a-dbdb03fee2b1", "f4311ea5-8055-4685-ac81-45fb168accda", "cf72cf71-7088-4135-9f13-3f004972f289"]) },
-  { kind: "sale", name: "Aura Gardens", area: "Tilal Al Ghaf", type: "villa", tag: "Upgraded", deal: "GREENBELT", spec: "Villa · 4 Bed · 5 Bath · 2,497 sqft", price: "6,600,000", id: "s-07-aura", photos: gal("s-07-aura") },
   { kind: "sale", name: "PRIVATE BEACH | SUNSET AND SEA VIEWS", area: "Palm · Garden Homes M", type: "villa", tag: "Luxe", deal: "SEA & SUNSET", spec: "4 Bed + Maid · 5 Bath · 7,384 sqft", price: "25,000,000", id: "s-08-frond-m", photos: pf("2BNXBYKMVZ2HCX5202FP9CBR2G", ["50721d57-4c68-4490-9055-4c2f7498ac26", "f4424ba3-bb6d-4394-baa6-3cdf2112e8f8", "6f885ffb-e9ae-4faa-bbd5-89bd04407c1e"]) },
   { kind: "sale", name: "RENOVATED | PRIVATE POOL | FULLY FURNISHED", area: "Jumeirah Park · Regional", type: "villa", tag: "Furnished", deal: "PRIVATE POOL", spec: "4 Bed + Maid · 5 Bath · 7,965 sqft", price: "11,000,000", id: "s-09-jpark", photos: pf("71ASHK8XBZ4MZYAWEN9JP9YTY0", ["4d41a088-362f-4f83-a1bb-e8f8475a5661", "2e11d281-3c77-4512-96f3-379c4767432e", "00847946-fe73-46a5-a560-60a7ea3b7253"]) },
   { kind: "sale", name: "HIGH FLOOR | PALM JUMEIRAH | SEA VIEW", area: "Palm · Marina Residences 6", type: "apt", tag: "Furnished", deal: "SEA VIEW", spec: "2 Bed · 2 Bath · 1,746 sqft", price: "4,500,000", id: "s-10-mr6", photos: pf("8F7DX5SW9KECE5R4N3NJ7MHC8C", ["1b346633-e946-4435-a478-1e61958ea28f", "8b5dd98c-8d28-4074-8911-8e977bd32846", "6de5a062-d157-42d8-b013-942eea35c5dc"]) },
