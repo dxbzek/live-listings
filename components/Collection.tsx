@@ -37,6 +37,7 @@ function Spec({ spec }: { spec: string }) {
 }
 
 function Card({ l, onOpen }: { l: Listing; onOpen: (l: Listing) => void }) {
+  const [coverError, setCoverError] = useState(false);
   const hasGallery = l.gallery.length > 0;
   return (
     <article className="card" data-cat={l.cat}>
@@ -49,7 +50,15 @@ function Card({ l, onOpen }: { l: Listing; onOpen: (l: Listing) => void }) {
         <div className="ph">
           <div className="ph-glyph" />
         </div>
-        {l.src && <img className="cover" src={l.src} alt={l.name} loading="lazy" />}
+        {l.src && !coverError && (
+          <img
+            className="cover"
+            src={l.src}
+            alt={l.name}
+            loading="lazy"
+            onError={() => setCoverError(true)}
+          />
+        )}
         {l.gallery.length > 1 && (
           <div className="shots">
             <CameraIcon />
