@@ -41,12 +41,6 @@ const pfimg = (key: string, uuid: string, variant = "668x452.jpg") =>
 const pf = (key: string, uuids: string[], variant?: string) =>
   uuids.map((u) => pfimg(key, u, variant));
 
-/* Local photo set helper — used by a couple of listings whose photos are not
- * hosted on the CDN. These resolve to nothing in this build (no local files),
- * so such listings render with the on-brand placeholder frame. */
-const gal = (id: string, count = 3) =>
-  Array.from({ length: count }, (_, i) => `photos/listings/${id}-${i + 1}.jpg`);
-
 /* Live PropertyFinder listing URLs */
 export const PF_URLS: Record<string, string> = {
   "r-01-springs8": "https://www.propertyfinder.ae/en/plp/rent/villa-for-rent-dubai-the-springs-springs-8-94022315.html",
@@ -87,7 +81,7 @@ export const PF_URLS: Record<string, string> = {
 const RAW: RawListing[] = [
   // RENT
   { kind: "rent", name: "NEWLY RENOVATED | VACANT | 2 BEDROOM + MAID", area: "The Springs", type: "villa", tag: "Vacant", deal: "NEWLY RENOVATED", spec: "2 Bed + Maid · 3 Bath · 1,630 sqft", price: "190,000", id: "r-01-springs8", photos: pf("K7DMJ0FZB7HAMDPEAS95605RP0", ["54c2b3ec-e92a-4065-ac3e-44d54559d645", "d1429c23-63c7-4457-83a3-71495c781f7b", "c89a69ad-9cf7-4335-8d33-98d3c0546c22"], "1312x894.webp") },
-  { kind: "rent", name: "Renovated 2BR | Full Sea View | Palm", area: "Palm Jumeirah", type: "apt", tag: "Furnished", deal: "FULL SEA VIEW", spec: "2 Bed · 3 Bath · 1,778 sqft · Renovated", price: "250,000", id: "r-02-mr6", photos: gal("r-02-mr6") },
+  { kind: "rent", name: "Renovated 2BR | Full Sea View | Palm", area: "Palm Jumeirah", type: "apt", tag: "Furnished", deal: "FULL SEA VIEW", spec: "2 Bed · 3 Bath · 1,778 sqft · Renovated", price: "250,000", id: "r-02-mr6", photos: [...pf("0725Z7WMTS7PXJH9G4T4ZSVFT0", ["184b2f28-1927-4246-8e76-4264e47452e0", "bbdc58b9-6607-4337-a5fc-e6cc4464c95a"], "1312x894.webp"), "https://graph-images.propertyfinder.ae/ae/building/4331/eca8c2f82be6287878c0cca67f60157f/watermark.jpeg"] },
   { kind: "rent", name: "Beachfront 4BR Villa | Atlantis View | Palm", area: "Palm · Garden Homes E", type: "villa", tag: "Luxe", deal: "ATLANTIS VIEW", spec: "4 Bed + Maid · 5 Bath · 6,698 sqft", price: "1,500,000", id: "r-03-frond-e", photos: pf("FGDEVPPPKVEWEBW0MGZR4D011C", ["09d544aa-e636-43b0-b9be-7754721f81fa", "4e5b9e0d-23b2-4e7a-b1e7-9713e9ccc501", "1ec9a0c2-a597-4ef3-bdf3-d3f296d5a1c1"]) },
   { kind: "rent", name: "Sea View | Elegant 2BR | Prime Location", area: "Palm · Marina Residences 6", type: "apt", tag: "Sea View", deal: "PRIME LOCATION", spec: "2 Bed · 3 Bath · 1,745 sqft · Sea View", price: "230,000", id: "r-07-mr6-2br", photos: pf("R6V3HHRMX1B1KJNZBGP55Y0N3C", ["b8c91d0f-189e-4c2e-ab37-da4ca3559059", "439af097-1f34-48fb-8026-2f54a6f72aa8", "0db8b48e-0e45-4aa0-8879-ad65182aa98d"]) },
   { kind: "rent", name: "Luxury 4BR Villa | Private Beach | Palm", area: "Palm · Garden Homes C", type: "villa", tag: "Furnished", deal: "PRIVATE BEACH", spec: "4 Bed + Maid · 5 Bath · 6,718 sqft", price: "900,000", id: "r-04-frond-c", photos: pf("0MARXYHA1RZT87FPEQ41M91BAM", ["4eca17c3-4244-42b3-b8f7-44bf017989e2", "5bccecc8-f5e5-4101-93a0-eb131dfcca65", "65fd37c7-f62d-4355-88b7-0f7b88a03b56"]) },
