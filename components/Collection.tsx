@@ -1,12 +1,15 @@
 "use client";
 
 import { Fragment, useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { WhatsAppIcon, CameraIcon } from "./icons";
+import ShareButton from "./ShareButton";
 import {
   LISTINGS,
   KIND_LABEL,
   catCount,
   groupedListings,
+  listingPath,
   waLink,
   type Category,
   type Listing,
@@ -81,7 +84,9 @@ function Card({ l, onOpen }: { l: Listing; onOpen: (l: Listing) => void }) {
           <span className={`type-mark type-${l.type}`} />
           {l.area}
         </div>
-        <div className="card-name">{l.name}</div>
+        <Link className="card-name" href={listingPath(l)}>
+          {l.name}
+        </Link>
         <div className="card-spec">
           <Spec spec={l.spec} />
         </div>
@@ -92,11 +97,17 @@ function Card({ l, onOpen }: { l: Listing; onOpen: (l: Listing) => void }) {
           </div>
           <span className={`card-kind ${l.kind}`}>{KIND_LABEL[l.cat]}</span>
         </div>
-        {l.url && (
-          <a className="card-pf" href={l.url} target="_blank" rel="noopener">
-            View all photos <span className="ar">↗</span>
-          </a>
-        )}
+        <div className="card-links">
+          <Link className="card-pf" href={listingPath(l)}>
+            Details &amp; brochure <span className="ar">→</span>
+          </Link>
+          <ShareButton
+            url={listingPath(l)}
+            title={`${l.name} · ${l.area}`}
+            text={`${KIND_LABEL[l.cat]} · ${l.spec} · AED ${l.price}${l.kind === "rent" ? "/yr" : ""} — via Abdul Kadir Faizal`}
+            variant="icon"
+          />
+        </div>
       </div>
     </article>
   );
@@ -196,11 +207,9 @@ function Lightbox({
             <WhatsAppIcon />
             <span>Enquire on WhatsApp</span>
           </a>
-          {listing.url && (
-            <a className="lb-pf" href={listing.url} target="_blank" rel="noopener">
-              View all photos <span className="ar">↗</span>
-            </a>
-          )}
+          <Link className="lb-pf" href={listingPath(listing)}>
+            Details &amp; brochure <span className="ar">→</span>
+          </Link>
         </div>
       </div>
     </div>
@@ -213,6 +222,9 @@ export default function Collection() {
   const [photoIdx, setPhotoIdx] = useState(0);
 
   useEffect(() => {
+    // Honour ?cat= from header navigation off the listing pages.
+    const cat = new URLSearchParams(window.location.search).get("cat");
+    if (cat && FILTERS.some((f) => f.key === cat)) setFilter(cat as Filter);
     const onSet = (e: Event) => setFilter((e as CustomEvent<Filter>).detail);
     window.addEventListener("set-filter", onSet);
     return () => window.removeEventListener("set-filter", onSet);
