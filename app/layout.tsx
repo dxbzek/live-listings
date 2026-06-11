@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Abdul Faizal, Buy & Rent Dubai's Finest Homes",
+  title: {
+    default: "Abdul Faizal, Buy & Rent Dubai's Finest Homes",
+    template: "%s · Abdul Faizal",
+  },
   description:
     "Hand-picked Dubai homes and investments for sale and rent, curated personally by Abdul Kadir Faizal, 18 years in the Dubai market. WhatsApp direct.",
   metadataBase: new URL("https://abdulfaizal.vercel.app"),

@@ -4,15 +4,21 @@ import { WhatsAppIcon } from "./icons";
 import { WA, catCount, type Category } from "@/lib/listings";
 
 function jump(cat: Category | "all") {
-  window.dispatchEvent(new CustomEvent("set-filter", { detail: cat }));
-  document.getElementById("listings")?.scrollIntoView({ behavior: "smooth" });
+  const el = document.getElementById("listings");
+  if (el) {
+    window.dispatchEvent(new CustomEvent("set-filter", { detail: cat }));
+    el.scrollIntoView({ behavior: "smooth" });
+  } else {
+    // On a listing detail page: go home and let Collection pick up ?cat=.
+    window.location.href = cat === "all" ? "/#listings" : `/?cat=${cat}#listings`;
+  }
 }
 
 export default function Header() {
   return (
     <header className="site">
       <div className="wrap bar">
-        <a href="#top" className="mark">
+        <a href="/#top" className="mark">
           ABDUL <span className="accent">FAIZAL</span>
         </a>
         <nav className="nav">
@@ -44,10 +50,10 @@ export default function Header() {
               </div>
             </div>
           </div>
-          <a href="#match" className="link">
+          <a href="/#match" className="link">
             Get Matched
           </a>
-          <a href="#faq" className="link">
+          <a href="/#faq" className="link">
             FAQ
           </a>
           <a

@@ -22,14 +22,17 @@ export interface RawListing {
   price: string;
   id: string;
   photos: string[];
+  /* Optional explicit brochure URL/path. Usually unnecessary: dropping a PDF
+   * named `<id>.pdf` (or `<slug>.pdf`) into public/brochures/ is auto-detected. */
+  brochure?: string;
 }
 
 export interface Listing extends RawListing {
   src: string | null;
   cat: Category;
   commercial: boolean;
-  url: string;
   gallery: string[]; // real, hosted photos only
+  slug: string; // clean URL segment for /listing/<slug>
 }
 
 /* Real PropertyFinder CDN photos: listing key + image UUIDs.
@@ -40,43 +43,6 @@ export interface Listing extends RawListing {
 const pfimg = (key: string, uuid: string) =>
   `https://static.shared.propertyfinder.ae/media/images/listing/${key}/${uuid}/668x452.jpg`;
 const pf = (key: string, uuids: string[]) => uuids.map((u) => pfimg(key, u));
-
-/* Live PropertyFinder listing URLs */
-export const PF_URLS: Record<string, string> = {
-  "r-01-springs8": "https://www.propertyfinder.ae/en/plp/rent/villa-for-rent-dubai-the-springs-springs-8-94022315.html",
-  "r-02-mr6": "https://www.propertyfinder.ae/en/plp/rent/apartment-for-rent-dubai-palm-jumeirah-marina-residences-marina-residences-6-97402257.html",
-  "r-03-frond-e": "https://www.propertyfinder.ae/en/plp/rent/villa-for-rent-dubai-palm-jumeirah-garden-homes-garden-homes-frond-e-96956247.html",
-  "r-04-frond-c": "https://www.propertyfinder.ae/en/plp/rent/villa-for-rent-dubai-palm-jumeirah-garden-homes-garden-homes-frond-c-96944750.html",
-  "r-07-mr6-2br": "https://www.propertyfinder.ae/en/plp/rent/apartment-for-rent-dubai-palm-jumeirah-marina-residences-marina-residences-6-96951812.html",
-  "r-08-timeplace": "https://www.propertyfinder.ae/en/plp/rent/apartment-for-rent-dubai-dubai-marina-time-place-tower-94032135.html",
-  "r-09-frond-e5": "https://www.propertyfinder.ae/en/plp/rent/villa-for-rent-dubai-palm-jumeirah-garden-homes-garden-homes-frond-e-97403437.html",
-  "r-10-frond-m": "https://www.propertyfinder.ae/en/plp/rent/villa-for-rent-dubai-palm-jumeirah-garden-homes-garden-homes-frond-m-96970020.html",
-  "r-11-sig-k": "https://www.propertyfinder.ae/en/plp/rent/villa-for-rent-dubai-palm-jumeirah-signature-villas-signature-villas-frond-k-96953814.html",
-  "r-12-mr6-3br": "https://www.propertyfinder.ae/en/plp/rent/apartment-for-rent-dubai-palm-jumeirah-marina-residences-marina-residences-6-96952061.html",
-  "r-06-onyx": "https://www.propertyfinder.ae/en/plp/commercial-rent/office-space-for-rent-dubai-greens-the-onyx-towers-the-onyx-tower-2-97365328.html",
-  "r-20-cayan": "https://www.propertyfinder.ae/en/plp/commercial-rent/office-space-for-rent-dubai-barsha-heights-tecom-cayan-business-center-97402756.html",
-  "r-22-mcag": "https://www.propertyfinder.ae/en/plp/commercial-rent/labor-camp-for-rent-dubai-jebel-ali-jebel-ali-industrial-jebel-ali-industrial-1-mcag-labour-camp-97371089.html",
-  "s-16-platinum": "https://www.propertyfinder.ae/en/plp/commercial-buy/office-space-for-sale-dubai-jumeirah-lake-towers-jlt-cluster-i-platinum-tower-pt-tower-97372976.html",
-  "s-17-cayan": "https://www.propertyfinder.ae/en/plp/commercial-buy/office-space-for-sale-dubai-barsha-heights-tecom-cayan-business-center-97805039.html",
-  "r-13-jpark": "https://www.propertyfinder.ae/en/plp/rent/villa-for-rent-dubai-jumeirah-park-regional-regional-large-94031609.html",
-  "r-14-frond-c2": "https://www.propertyfinder.ae/en/plp/rent/villa-for-rent-dubai-palm-jumeirah-garden-homes-garden-homes-frond-c-97404846.html",
-  "r-15-yansoon": "https://www.propertyfinder.ae/en/plp/rent/apartment-for-rent-dubai-downtown-dubai-old-town-yansoon-yansoon-3-94032023.html",
-  "r-16-alquoz": "https://www.propertyfinder.ae/en/plp/rent/villa-for-rent-dubai-al-quoz-al-quoz-4-al-quoz-4-villas-97834001.html",
-  "r-17-fivepalm": "https://www.propertyfinder.ae/en/plp/rent/apartment-for-rent-dubai-palm-jumeirah-five-palm-jumeirah-97829396.html",
-  "r-18-dec2": "https://www.propertyfinder.ae/en/plp/rent/apartment-for-rent-dubai-dubai-marina-dec-towers-dec-tower-2-94447595.html",
-  "r-19-serenity": "https://www.propertyfinder.ae/en/plp/rent/apartment-for-rent-dubai-jumeirah-village-circle-district-10-serenity-lakes-5-89643413.html",
-  "s-08-frond-m": "https://www.propertyfinder.ae/en/plp/buy/villa-for-sale-dubai-palm-jumeirah-garden-homes-garden-homes-frond-m-97405058.html",
-  "s-09-jpark": "https://www.propertyfinder.ae/en/plp/buy/villa-for-sale-dubai-jumeirah-park-regional-regional-large-97403672.html",
-  "s-10-mr6": "https://www.propertyfinder.ae/en/plp/buy/apartment-for-sale-dubai-palm-jumeirah-marina-residences-marina-residences-6-97804080.html",
-  "s-11-giovanni": "https://www.propertyfinder.ae/en/plp/buy/apartment-for-sale-dubai-dubai-sports-city-giovanni-boutique-suites-94004727.html",
-  "s-12-palmcrown": "https://www.propertyfinder.ae/en/plp/buy/villa-for-sale-dubai-palm-jumeirah-the-palm-crown-91808085.html",
-  "s-13-timeplace": "https://www.propertyfinder.ae/en/plp/buy/apartment-for-sale-dubai-dubai-marina-time-place-tower-97818929.html",
-  "s-14-dec2": "https://www.propertyfinder.ae/en/plp/buy/apartment-for-sale-dubai-dubai-marina-dec-towers-dec-tower-2-97806333.html",
-  "s-15-mr3": "https://www.propertyfinder.ae/en/plp/buy/apartment-for-sale-dubai-palm-jumeirah-marina-residences-marina-residences-3-97803120.html",
-  "s-16-jheights": "https://www.propertyfinder.ae/en/plp/buy/apartment-for-sale-dubai-jumeirah-islands-west-cluster-97404937.html",
-  "s-17-aladdin": "https://www.propertyfinder.ae/en/plp/buy/apartment-for-sale-dubai-living-legends-aladdin-97404125.html",
-  "s-18-mr5": "https://www.propertyfinder.ae/en/plp/buy/apartment-for-sale-dubai-palm-jumeirah-marina-residences-marina-residences-5-97366453.html",
-};
 
 const RAW: RawListing[] = [
   // RENT
@@ -119,7 +85,22 @@ const RAW: RawListing[] = [
 
 const isHosted = (src: string) => /^https?:\/\//i.test(src);
 
-/* Normalize: cover = first hosted photo; derive 4-way category + URL. */
+/* Clean URL segment from a listing name: lowercase, ascii, dash-separated,
+ * capped at 8 words. e.g. "Renovated 2BR | Full Sea View | Palm"
+ * → "renovated-2br-full-sea-view-palm". */
+const slugify = (s: string) =>
+  s
+    .normalize("NFKD")
+    .toLowerCase()
+    .replace(/['’"]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .split("-")
+    .slice(0, 8)
+    .join("-");
+
+/* Normalize: cover = first hosted photo; derive 4-way category + slug. */
+const slugCounts = new Map<string, number>();
 export const LISTINGS: Listing[] = RAW.map((l) => {
   const gallery = l.photos.filter(isHosted);
   const commercial = l.type === "office";
@@ -130,15 +111,22 @@ export const LISTINGS: Listing[] = RAW.map((l) => {
     : l.kind === "rent"
     ? "rent"
     : "buy";
+  const base = slugify(l.name) || l.id;
+  const n = (slugCounts.get(base) ?? 0) + 1;
+  slugCounts.set(base, n);
   return {
     ...l,
     gallery,
     src: gallery[0] || null,
     commercial,
     cat,
-    url: PF_URLS[l.id] || "",
+    slug: n === 1 ? base : `${base}-${n}`,
   };
 });
+
+export const bySlug = (slug: string) => LISTINGS.find((l) => l.slug === slug);
+
+export const listingPath = (l: Listing) => `/listing/${l.slug}`;
 
 export interface Group {
   key: Category;
