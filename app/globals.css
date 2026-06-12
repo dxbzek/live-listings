@@ -223,6 +223,21 @@ h1.hero-title .gold { color: var(--gold); }
 .filter button:hover { color: var(--ink); }
 .filter button.active { background: var(--ink); color: #fff; }
 .filter button.active .c { color: var(--gold); }
+/* On narrow screens the single bordered bar wraps raggedly; switch to evenly
+   sized, individually bordered chips so the wrapped rows stay tidy. */
+@media (max-width: 680px) {
+  .sec-head { gap: 22px; }
+  .filter {
+    width: 100%; border: none; background: transparent;
+    gap: 8px; justify-content: flex-start;
+  }
+  .filter button {
+    flex: 1 1 auto; text-align: center;
+    border: 1px solid var(--rule); padding: 12px 14px;
+  }
+  .filter button:last-child { border-right: 1px solid var(--rule); }
+  .filter button.active { border-color: var(--ink); }
+}
 
 .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
 @media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
