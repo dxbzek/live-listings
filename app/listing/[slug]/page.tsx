@@ -156,7 +156,7 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
 
       <footer className="site">
         <div className="wrap foot-bar">
-          <span>Abdul Kadir Faizal · Dubai Real Estate</span>
+          <span>Abdul Kadir Faizal · ERE Homes Real Estate, Dubai</span>
           <span>Top Listings · September 2026</span>
           <a href="https://instagram.com/akfinspire" target="_blank" rel="noopener">
             @akfinspire

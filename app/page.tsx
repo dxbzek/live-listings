@@ -5,7 +5,9 @@ import { WhatsAppIcon } from "@/components/icons";
 import Portrait from "@/components/Portrait";
 import { LISTINGS, WA } from "@/lib/listings";
 
-const heroSrc = LISTINGS.find((l) => l.id === "r-03-frond-e")?.src ?? null;
+/* Hero shows a real, permitted listing. Keep the id in step with lib/listings.ts. */
+const hero = LISTINGS.find((l) => l.id === "s-eh-pf-1354");
+const heroSrc = hero?.src ?? null;
 
 const FAQ = [
   {
@@ -132,11 +134,11 @@ export default function Page() {
             <div className="ph">
               <div className="ph-glyph" />
             </div>
-            {heroSrc && <img className="cover" src={heroSrc} alt="Featured Palm Crown villa" />}
-            <div className="badge">Featured · Palm Jumeirah</div>
+            {heroSrc && <img className="cover" src={heroSrc} alt={hero?.name ?? "Featured listing"} />}
+            <div className="badge">Featured · {hero?.area.split(" · ")[0] ?? "Dubai"}</div>
             <div className="cap">
-              <div className="n">Palm Crown villa</div>
-              <div className="a">Garden Homes · Atlantis View</div>
+              <div className="n">{hero?.name ?? ""}</div>
+              <div className="a">{hero ? `${hero.area} · Permit No. ${hero.permit}` : ""}</div>
             </div>
           </div>
         </div>
@@ -285,7 +287,7 @@ export default function Page() {
 
       <footer className="site">
         <div className="wrap foot-bar">
-          <span>Abdul Kadir Faizal · Dubai Real Estate</span>
+          <span>Abdul Kadir Faizal · ERE Homes Real Estate, Dubai</span>
           <span>Top Listings · September 2026</span>
           <a href="https://instagram.com/akfinspire" target="_blank" rel="noopener">
             @akfinspire
