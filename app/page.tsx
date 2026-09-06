@@ -70,7 +70,7 @@ const FAQ = [
 export default function Page() {
   return (
     <>
-      <div className="announce">JUNE 2026 LISTINGS LIVE</div>
+      <div className="announce">SEPTEMBER 2026 LISTINGS LIVE</div>
 
       <Header />
 
@@ -82,7 +82,7 @@ export default function Page() {
           <div className="hero-copy">
             <div className="hero-badge">
               <span className="pulse" />
-              TOP LISTINGS · JUNE 2026
+              TOP LISTINGS · SEPTEMBER 2026
             </div>
             <h1 className="hero-title">
               BUY. RENT.
@@ -99,7 +99,7 @@ export default function Page() {
             <div className="hero-cta">
               <a
                 href={`https://wa.me/${WA}?text=${encodeURIComponent(
-                  "Hi Abdul, I'd like to talk about your June listings."
+                  "Hi Abdul, I'd like to talk about your September listings."
                 )}`}
                 target="_blank"
                 rel="noopener"
@@ -286,7 +286,7 @@ export default function Page() {
       <footer className="site">
         <div className="wrap foot-bar">
           <span>Abdul Kadir Faizal · Dubai Real Estate</span>
-          <span>Top Listings · June 2026</span>
+          <span>Top Listings · September 2026</span>
           <a href="https://instagram.com/akfinspire" target="_blank" rel="noopener">
             @akfinspire
           </a>

@@ -672,3 +672,7 @@ footer.site { background: var(--ink); color: var(--ink-mute); border-top: 1px so
   .lb-title { font-size: 26px; }
   .lb-thumb { width: 58px; height: 42px; }
 }
+
+/* Trakheesi permit line (Dubai advertising law: permit number on every ad) */
+.card-permit { margin-top: 10px; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); }
+.d-permit { margin-top: 10px; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); }

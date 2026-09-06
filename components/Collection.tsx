@@ -10,6 +10,8 @@ import {
   catCount,
   groupedListings,
   listingPath,
+  priceLabel,
+  priceStr,
   waLink,
   type Category,
   type Listing,
@@ -92,11 +94,12 @@ function Card({ l, onOpen }: { l: Listing; onOpen: (l: Listing) => void }) {
         </div>
         <div className="card-foot">
           <div className="card-price">
-            <div className="lbl">{l.kind === "rent" ? "AED / Year" : "Asking · AED"}</div>
+            <div className="lbl">{priceLabel(l)}</div>
             <div className="v">{l.price}</div>
           </div>
           <span className={`card-kind ${l.kind}`}>{KIND_LABEL[l.cat]}</span>
         </div>
+        <div className="card-permit">Permit No. {l.permit} · Ref {l.ref}</div>
         <div className="card-links">
           <Link className="card-pf" href={listingPath(l)}>
             Details &amp; brochure <span className="ar">→</span>
@@ -104,7 +107,7 @@ function Card({ l, onOpen }: { l: Listing; onOpen: (l: Listing) => void }) {
           <ShareButton
             url={listingPath(l)}
             title={`${l.name} · ${l.area}`}
-            text={`${KIND_LABEL[l.cat]} · ${l.spec} · AED ${l.price}${l.kind === "rent" ? "/yr" : ""} — via Abdul Kadir Faizal`}
+            text={`${KIND_LABEL[l.cat]} · ${l.spec} · ${priceStr(l)} — via Abdul Kadir Faizal`}
             variant="icon"
           />
         </div>
@@ -150,8 +153,6 @@ function Lightbox({
     };
   }, [onClose, step]);
 
-  const priceStr = listing.kind === "rent" ? `AED ${listing.price} / yr` : `AED ${listing.price}`;
-
   return (
     <div
       className="lightbox open"
@@ -177,7 +178,7 @@ function Lightbox({
         <div className="lb-head">
           <div className="lb-title">{listing.name}</div>
           <div className="lb-meta">
-            {listing.area} · {priceStr} · {idx + 1}/{total}
+            {listing.area} · {priceStr(listing)} · Permit {listing.permit} · {idx + 1}/{total}
           </div>
         </div>
         <div className="lb-imgwrap">

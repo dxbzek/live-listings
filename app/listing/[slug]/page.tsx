@@ -7,13 +7,11 @@ import DetailGallery from "@/components/DetailGallery";
 import ShareButton from "@/components/ShareButton";
 import { DownloadIcon, WhatsAppIcon } from "@/components/icons";
 import { brochureFor } from "@/lib/brochures";
-import { bySlug, KIND_LABEL, LISTINGS, listingPath, WA, waLink, type Listing } from "@/lib/listings";
+import { bySlug, KIND_LABEL, LISTINGS, listingPath, priceLabel, priceStr, WA, waLink } from "@/lib/listings";
 
 export function generateStaticParams() {
   return LISTINGS.map((l) => ({ slug: l.slug }));
 }
-
-const priceLine = (l: Listing) => (l.kind === "rent" ? `AED ${l.price} / yr` : `AED ${l.price}`);
 
 export async function generateMetadata({
   params,
@@ -24,7 +22,7 @@ export async function generateMetadata({
   const l = bySlug(slug);
   if (!l) return {};
   const title = `${l.name} · ${l.area}`;
-  const description = `${KIND_LABEL[l.cat]} · ${l.spec} · ${priceLine(l)}. Enquire directly with Abdul Kadir Faizal on WhatsApp.`;
+  const description = `${KIND_LABEL[l.cat]} · ${l.spec} · ${priceStr(l)}. Enquire directly with Abdul Kadir Faizal on WhatsApp.`;
   return {
     title,
     description,
@@ -61,14 +59,14 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
 
   const brochure = brochureFor(l);
   const shareTitle = `${l.name} · ${l.area}`;
-  const shareText = `${KIND_LABEL[l.cat]} · ${l.spec} · ${priceLine(l)} — via Abdul Kadir Faizal`;
+  const shareText = `${KIND_LABEL[l.cat]} · ${l.spec} · ${priceStr(l)} — via Abdul Kadir Faizal`;
   const brochureAsk = `https://wa.me/${WA}?text=${encodeURIComponent(
     `Hi Abdul, could you send me the brochure for ${l.name} (${l.area})?`
   )}`;
 
   return (
     <>
-      <div className="announce">JUNE 2026 LISTINGS LIVE</div>
+      <div className="announce">SEPTEMBER 2026 LISTINGS LIVE</div>
 
       <Header />
 
@@ -101,9 +99,10 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
                 <Spec spec={l.spec} />
               </div>
               <div className="d-price">
-                <div className="lbl">{l.kind === "rent" ? "AED / Year" : "Asking · AED"}</div>
+                <div className="lbl">{priceLabel(l)}</div>
                 <div className="v">{l.price}</div>
               </div>
+              <div className="d-permit">Trakheesi permit No. {l.permit} · Ref {l.ref}</div>
               <div className="d-ctas">
                 <a className="btn-wa lg" href={waLink(l)} target="_blank" rel="noopener">
                   <WhatsAppIcon />
@@ -158,7 +157,7 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
       <footer className="site">
         <div className="wrap foot-bar">
           <span>Abdul Kadir Faizal · Dubai Real Estate</span>
-          <span>Top Listings · June 2026</span>
+          <span>Top Listings · September 2026</span>
           <a href="https://instagram.com/akfinspire" target="_blank" rel="noopener">
             @akfinspire
           </a>
